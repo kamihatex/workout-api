@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 	"workoutGo/internal/app"
+	"workoutGo/routes"
 )
 
 func main() {
@@ -15,9 +15,10 @@ func main() {
 	}
 	app.Logger.Println("app is running...")
 
-	http.HandleFunc("/health", HealthCheck)
+	r := routes.SetupRoutes(app)
 	server := &http.Server{
 		Addr:         ":8080",
+		Handler:      r,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
@@ -27,8 +28,4 @@ func main() {
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
-}
-
-func HealthCheck(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Status is available\n")
 }
