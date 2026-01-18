@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 	"workoutGo/internal/app"
-	"workoutGo/routes"
+	"workoutGo/internal/routes"
 )
 
 func main() {
@@ -13,6 +13,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer app.DB.Close()
 	app.Logger.Println("app is running...")
 
 	r := routes.SetupRoutes(app)
