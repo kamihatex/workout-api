@@ -1,7 +1,7 @@
 services:
   db:
     container_name: workoutDB
-    image: postgres:14
+    image: postgres:18
     volumes:
       - ./database/postgres-data:/var/lib/postgresql/data
     ports:
