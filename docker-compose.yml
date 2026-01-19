@@ -3,7 +3,7 @@ services:
     container_name: workoutDB
     image: postgres:18
     volumes:
-      - ./database/postgres-data:/var/lib/postgresql/data
+      - ./database/postgres-data:/var/lib/postgresql
     ports:
       - "5432:5432"
     environment:
