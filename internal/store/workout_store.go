@@ -4,7 +4,6 @@ import "database/sql"
 
 type Workout struct {
 	ID              int            `json:"id"`
-	UserID          int            `json:"user_id"`
 	Title           string         `json:"title"`
 	Description     string         `json:"description"`
 	DurationMinutes int            `json:"duration_minutes"`
@@ -44,21 +43,19 @@ func (pg *PostgresWorkoutStore) CreateWorkout(workout *Workout) (*Workout, error
 	defer tx.Rollback()
 
 	query :=
-		`
-  INSERT INTO workouts (user_id, title, description, duration_minutes, calories_burned)
-  VALUES ($1, $2, $3, $4, $5)
+		`INSERT INTO workouts (title, description, duration_minutes, calories_burned)
+  VALUES ($1, $2, $3, $4)
   RETURNING id 
   `
 
-	err = tx.QueryRow(query, workout.UserID, workout.Title, workout.Description, workout.DurationMinutes, workout.CaloriesBurned).Scan(&workout.ID)
+	err = tx.QueryRow(query, workout.Title, workout.Description, workout.DurationMinutes, workout.CaloriesBurned).Scan(&workout.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	// we also need to insert the entries
 	for _, entry := range workout.Entries {
-		query := `
-    INSERT INTO workout_entries (workout_id, exercise_name, sets, reps, duration_seconds, weight, notes, order_index)
+		query := `INSERT INTO workout_entries (workout_id, exercise_name, sets, reps, duration_seconds, weight, notes, order_index)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING id
     `
