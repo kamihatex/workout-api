@@ -14,11 +14,11 @@ services:
 
   test_db:
     container_name: "workoutDB_test"
-    image: postgres:12.4-alpine
+    image: postgres:18
     volumes:
-      - "./database/postgres-test-data:/var/lib/postgresql/data:rw"
+      - "./database/postgres-test-data:/var/lib/postgresql"
     ports:
-      - "5433:5432"
+      - "5434:5433"
     environment:
       POSTGRES_DB: "postgres"
       POSTGRES_USER: "postgres"
